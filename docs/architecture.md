@@ -25,6 +25,31 @@ browser ──> frontend (React + Vite, static build) ──/api──> backend 
 | TypeScript 6.0 (not 7) | `typescript-eslint` type-aware linting does not support 7 yet | Revisit when the lint tooling catches up |
 | Self-hosted variable fonts (Fontsource) | No Google CDN, no third-party requests | Fonts count against the bundle size budget |
 
+## Backend layout
+
+```
+com.arigavincent.portfolio
+├── config       JPA auditing, OpenAPI
+├── controller   REST endpoints (thin: delegate to services)
+├── service      Transactions and business rules
+├── repository   Spring Data JPA repositories
+├── entity       JPA entities and enums
+├── dto          API request/response records
+├── mapper       MapStruct entity <-> DTO mappers
+├── exception    Domain exceptions and the global handler
+└── seed         Starter content, applied to empty tables on startup
+```
+
+| Decision | Why | Trade-off |
+| --- | --- | --- |
+| Flyway migrations in portable SQL | The same scripts run on PostgreSQL and on H2 in PostgreSQL mode | No Postgres-only types (`jsonb`, arrays); lists are stored in child tables |
+| Tests on H2 by default, plus a CI job on real PostgreSQL | Fast tests with no Docker needed locally, while CI still proves the migrations and queries on the production database | Two database engines to keep compatible |
+| MapStruct for mapping, unmapped fields are compile errors | A forgotten field fails the build instead of silently returning `null` | Annotation processing adds a little build time |
+| Lombok on entities only, records for DTOs | Entities stay readable; DTOs are immutable | Lombok is one more annotation processor |
+| `OrderedEntity` / `OrderedRepository` / `OrderedContentService` base types | Skills, experience, education and services share one implementation of "list in display order" | A small amount of generics |
+| One `ApiError` shape from a single `@RestControllerAdvice` | Clients handle one error format, including Spring MVC's own errors | Spring's `ProblemDetail` format is not used |
+| Seed runner fills empty tables only | Safe to leave enabled: admin edits are never overwritten | Changing seed copy later does not update an existing database |
+
 ## Palette and contrast
 
 The six A&J brand colours are fixed. Extra shades are derived by changing lightness only, so no new

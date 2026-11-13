@@ -30,10 +30,30 @@ Requirements: JDK 21, Node 22+ (24 LTS recommended), Docker (optional, for the P
 
 ```bash
 cd backend
-./gradlew bootRun          # http://localhost:8080/actuator/health
+./gradlew bootRun --args='--spring.profiles.active=local'   # in-memory database, no setup
 ./gradlew build            # format check + tests + jar
 ./gradlew spotlessApply    # fix formatting
 ```
+
+The `local` profile uses an in-memory H2 database (PostgreSQL mode) that is migrated and seeded on
+every start. Without it, the app expects PostgreSQL via `SPRING_DATASOURCE_URL`,
+`SPRING_DATASOURCE_USERNAME` and `SPRING_DATASOURCE_PASSWORD` (see Docker below).
+
+| URL | What |
+| --- | --- |
+| `http://localhost:8080/swagger-ui.html` | Interactive API docs |
+| `http://localhost:8080/v3/api-docs` | OpenAPI document |
+| `http://localhost:8080/actuator/health` | Health check |
+
+Public endpoints: `GET /api/projects` (`?featured=true`), `GET /api/projects/{slug}`,
+`GET /api/skills`, `GET /api/experience`, `GET /api/education`, `GET /api/services`,
+`GET /api/blog`, `GET /api/blog/{slug}`, `GET /api/settings`.
+
+### Seed data
+
+On startup the app fills any empty content table with starter content (profile, skills, projects,
+experience, education, services). It never overwrites existing rows. Anything that still needs
+confirming carries a visible `[verify]` marker. Set `APP_SEED_ENABLED=false` to turn seeding off.
 
 ### Frontend
 
@@ -62,8 +82,8 @@ test enforces WCAG AA contrast for every text/background pair. See
 
 ## Roadmap
 
-1. **Foundation**: monorepo, skeletons, CI, Docker Compose (this release)
-2. Backend domain: entities, migrations, public API, seed data
+1. ~~Foundation: monorepo, skeletons, CI, Docker Compose~~ (v0.1.0)
+2. ~~Backend domain: entities, migrations, public API, seed data~~ (v0.2.0)
 3. Security and admin API: JWT, CRUD, uploads, contact form
 4. Frontend design system and layout
 5. 3D hero and scroll storytelling

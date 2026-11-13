@@ -1,5 +1,6 @@
 package com.arigavincent.portfolio.service;
 
+import com.arigavincent.portfolio.dto.SiteSettingsRequest;
 import com.arigavincent.portfolio.dto.SiteSettingsResponse;
 import com.arigavincent.portfolio.entity.SiteSettings;
 import com.arigavincent.portfolio.exception.ResourceNotFoundException;
@@ -11,16 +12,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class SiteSettingsService {
 
     private final SiteSettingsRepository repository;
     private final SiteSettingsMapper mapper;
 
+    @Transactional(readOnly = true)
     public SiteSettingsResponse get() {
+        return mapper.toResponse(find());
+    }
+
+    @Transactional
+    public SiteSettingsResponse update(SiteSettingsRequest request) {
+        SiteSettings settings = find();
+        mapper.updateEntity(request, settings);
+        return mapper.toResponse(repository.saveAndFlush(settings));
+    }
+
+    SiteSettings find() {
         return repository
                 .findById(SiteSettings.SINGLETON_ID)
-                .map(mapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Site settings", "default"));
     }
 }

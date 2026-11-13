@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BlogPostRepository extends JpaRepository<BlogPost, Long> {
+public interface BlogPostRepository extends JpaRepository<BlogPost, Long>, SlugRepository {
 
     List<BlogPost> findAllByStatusOrderByPublishedAtDescIdDesc(PublicationStatus status);
 

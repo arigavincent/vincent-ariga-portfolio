@@ -73,6 +73,10 @@ public class SiteSettings {
     @Column(nullable = false, length = 400)
     private String seoDescription;
 
+    /** Storage key of the uploaded CV; when empty the bundled placeholder PDF is served. */
+    @Column(length = 200)
+    private String cvFileKey;
+
     @LastModifiedDate
     @Column(nullable = false)
     private Instant updatedAt;

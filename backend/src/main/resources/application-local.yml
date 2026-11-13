@@ -1,8 +1,17 @@
 # Zero-setup development profile: an in-memory H2 database in PostgreSQL mode.
 # Run with: ./gradlew bootRun --args='--spring.profiles.active=local'
 # Data is re-seeded on every start and lost on shutdown.
+#
+# To sign in to the admin API locally, export APP_ADMIN_USERNAME and APP_ADMIN_PASSWORD first.
+# APP_JWT_SECRET is optional here: without it a random key is generated on each start.
 spring:
   datasource:
     url: jdbc:h2:mem:portfolio;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
     username: sa
     password:
+
+app:
+  security:
+    refresh-cookie:
+      # Plain http://localhost cannot receive Secure cookies in every browser.
+      secure: false

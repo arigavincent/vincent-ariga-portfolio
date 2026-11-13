@@ -1,8 +1,10 @@
 package com.arigavincent.portfolio.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class ResourceNotFoundException extends ApiException {
 
     public ResourceNotFoundException(String resource, Object identifier) {
-        super("%s '%s' was not found".formatted(resource, identifier));
+        super(HttpStatus.NOT_FOUND, "%s '%s' was not found".formatted(resource, identifier));
     }
 }

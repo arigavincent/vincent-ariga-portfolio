@@ -45,9 +45,39 @@ every start. Without it, the app expects PostgreSQL via `SPRING_DATASOURCE_URL`,
 | `http://localhost:8080/v3/api-docs` | OpenAPI document |
 | `http://localhost:8080/actuator/health` | Health check |
 
-Public endpoints: `GET /api/projects` (`?featured=true`), `GET /api/projects/{slug}`,
-`GET /api/skills`, `GET /api/experience`, `GET /api/education`, `GET /api/services`,
-`GET /api/blog`, `GET /api/blog/{slug}`, `GET /api/settings`.
+**Public endpoints**
+
+| Method | Path | Notes |
+| --- | --- | --- |
+| GET | `/api/projects`, `/api/projects/{slug}` | Published only; `?featured=true` to filter |
+| GET | `/api/skills`, `/api/experience`, `/api/education`, `/api/services` | In display order |
+| GET | `/api/blog`, `/api/blog/{slug}` | Published only |
+| GET | `/api/settings` | Profile and site-wide copy |
+| GET | `/api/cv` | CV as a PDF download (placeholder until one is uploaded) |
+| GET | `/api/files/{key}` | Uploaded images |
+| POST | `/api/contact` | Validated, honeypot-protected, rate limited per IP |
+
+**Auth and admin endpoints** (admin needs `Authorization: Bearer <access token>`)
+
+| Method | Path | Notes |
+| --- | --- | --- |
+| POST | `/api/auth/login` | Returns a 15-minute access token, sets the HttpOnly refresh cookie |
+| POST | `/api/auth/refresh`, `/api/auth/logout` | Rotates or revokes the refresh cookie |
+| GET | `/api/admin/me` | Current admin |
+| CRUD | `/api/admin/{projects,skills,experience,education,services,blog}` | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` |
+| GET, PUT | `/api/admin/settings` | Edit profile and site copy |
+| GET, PATCH, DELETE | `/api/admin/messages` | Contact inbox, plus `/unread-count` |
+| POST | `/api/admin/uploads`, `/api/admin/cv` | Image upload; replace the CV PDF |
+
+To use the admin API locally, set the first admin account before starting:
+
+```bash
+export APP_ADMIN_USERNAME=you APP_ADMIN_PASSWORD='at-least-12-characters'
+./gradlew bootRun --args='--spring.profiles.active=local'
+```
+
+Every setting is an environment variable; see [`.env.example`](.env.example). Outside the `local`
+profile the app refuses to start without `APP_JWT_SECRET`.
 
 ### Seed data
 
@@ -69,7 +99,7 @@ npm run build
 ### Full stack with Docker
 
 ```bash
-cp .env.example .env       # then set POSTGRES_PASSWORD
+cp .env.example .env       # then set POSTGRES_PASSWORD, APP_JWT_SECRET and the admin account
 docker compose up --build
 ```
 
@@ -84,7 +114,7 @@ test enforces WCAG AA contrast for every text/background pair. See
 
 1. ~~Foundation: monorepo, skeletons, CI, Docker Compose~~ (v0.1.0)
 2. ~~Backend domain: entities, migrations, public API, seed data~~ (v0.2.0)
-3. Security and admin API: JWT, CRUD, uploads, contact form
+3. ~~Security and admin API: JWT, CRUD, uploads, contact form~~ (v0.3.0)
 4. Frontend design system and layout
 5. 3D hero and scroll storytelling
 6. Content sections

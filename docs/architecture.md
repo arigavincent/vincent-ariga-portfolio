@@ -29,8 +29,12 @@ browser ──> frontend (React + Vite, static build) ──/api──> backend 
 
 ```
 com.arigavincent.portfolio
-├── config       JPA auditing, OpenAPI
-├── controller   REST endpoints (thin: delegate to services)
+├── config       Typed app properties, JPA auditing, OpenAPI, web config
+├── controller   Public REST endpoints (thin: delegate to services)
+│   └── admin    Admin endpoints; CrudController is the shared base
+├── security     Security filter chain, JWT, refresh tokens, admin bootstrap
+├── ratelimit    @RateLimited annotation, interceptor and token buckets
+├── storage      StorageService abstraction and the local disk implementation
 ├── service      Transactions and business rules
 ├── repository   Spring Data JPA repositories
 ├── entity       JPA entities and enums
@@ -46,9 +50,28 @@ com.arigavincent.portfolio
 | Tests on H2 by default, plus a CI job on real PostgreSQL | Fast tests with no Docker needed locally, while CI still proves the migrations and queries on the production database | Two database engines to keep compatible |
 | MapStruct for mapping, unmapped fields are compile errors | A forgotten field fails the build instead of silently returning `null` | Annotation processing adds a little build time |
 | Lombok on entities only, records for DTOs | Entities stay readable; DTOs are immutable | Lombok is one more annotation processor |
-| `OrderedEntity` / `OrderedRepository` / `OrderedContentService` base types | Skills, experience, education and services share one implementation of "list in display order" | A small amount of generics |
+| Generic `CrudService` / `CrudController` / `CrudMapper` | Six content types share one implementation of list, read, create, update and delete; a new type is three small classes | A small amount of generics, plus `validate` / `beforeSave` hooks for type-specific rules |
 | One `ApiError` shape from a single `@RestControllerAdvice` | Clients handle one error format, including Spring MVC's own errors | Spring's `ProblemDetail` format is not used |
 | Seed runner fills empty tables only | Safe to leave enabled: admin edits are never overwritten | Changing seed copy later does not update an existing database |
+
+## Security
+
+| Decision | Why | Trade-off |
+| --- | --- | --- |
+| Access token: HS256 JWT, 15 minutes, sent as a `Bearer` header | Stateless and short-lived; the SPA keeps it in memory only, so XSS cannot read it from storage | A page reload needs a refresh call |
+| Refresh token: opaque, random, stored as a SHA-256 hash, in an `HttpOnly` cookie scoped to `/api/auth` | JavaScript cannot read it, and a database leak cannot be replayed | Needs a table and a cleanup job |
+| Rotation with reuse detection | Each refresh token works once; presenting a used one revokes every session of that account | A lost network response can force a new login |
+| Spring Security's resource server for JWT validation | No hand-written token filter to get wrong | HS256 means the API both signs and verifies (fine for one service) |
+| Admin account bootstrapped from env vars, BCrypt cost 12 | No credentials in code or migrations; an existing account is never modified | Changing the password means updating the database, not the env var |
+| Login takes the same time for unknown users and wrong passwords | No username enumeration by timing | One extra BCrypt check on unknown users |
+| Bucket4j token buckets per IP, held in memory (Caffeine) | Contact form and login are throttled with no extra infrastructure | Limits are per instance; a multi-node deployment would need a shared store |
+| Honeypot answers `202` like a real submission | Bots learn nothing from the response | A person using a form filler that populates hidden fields is dropped silently |
+| Upload type detected from the file's leading bytes | The file name and `Content-Type` header are attacker-controlled; SVG is refused outright | Only the listed formats are accepted |
+| Storage keys are generated UUIDs and validated on read | Rules out path traversal and overwriting | Original file names are not kept |
+| Fail-fast configuration | Missing `APP_JWT_SECRET` or a short admin password stops startup with a clear message | The app will not start half-configured |
+
+Uploads live on local disk behind the `StorageService` interface. On hosts with an ephemeral
+filesystem they need a mounted volume, or an S3/Cloudflare R2 implementation of the same interface.
 
 ## Palette and contrast
 

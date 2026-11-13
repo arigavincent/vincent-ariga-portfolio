@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.arigavincent"
-version = "0.1.0"
+version = "0.2.0"
 
 java {
     toolchain {
@@ -18,12 +18,28 @@ repositories {
     mavenCentral()
 }
 
+val mapstructVersion = "1.6.3"
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.10.0")
+    implementation("org.mapstruct:mapstruct:$mapstructVersion")
+
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+    annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+
+    runtimeOnly("org.postgresql:postgresql")
+    developmentOnly("com.h2database:h2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -40,6 +56,12 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(
+        listOf("-parameters", "-Amapstruct.defaultComponentModel=spring", "-Amapstruct.unmappedTargetPolicy=ERROR"),
+    )
 }
 
 tasks.withType<Test> {

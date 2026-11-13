@@ -1,0 +1,48 @@
+/*
+ * A&J design tokens: the single source of truth for colour and type.
+ *
+ * Six brand colours come straight from the A&J palette. Every other shade is
+ * derived from one of them by changing lightness only (same hue and saturation),
+ * so no new hues are introduced. Tailwind's default palette is cleared so that
+ * components can only reach for these tokens.
+ *
+ * Contrast is enforced by src/styles/tokens.test.ts (WCAG AA).
+ */
+@theme {
+  --color-*: initial;
+
+  /* Base ink #1b1b20 and its lightness scale (surfaces, cards, borders) */
+  --color-ink-950: #0e0e11;
+  --color-ink-900: #1b1b20;
+  --color-ink-850: #222228;
+  --color-ink-800: #292930;
+  --color-ink-700: #363640;
+  --color-ink-600: #484856;
+
+  /* Primary accent: orange #f26b1d (CTAs, glows, key highlights) */
+  --color-orange-400: #f4813e;
+  --color-orange-500: #f26b1d;
+  --color-orange-600: #e35b0d;
+  --color-orange-700: #c14e0b;
+
+  /* Secondary accent: gold #e8c766 (labels, overlines, fine details) */
+  --color-gold-300: #efd895;
+  --color-gold-400: #e8c766;
+  --color-gold-600: #deae21;
+
+  /* Text */
+  --color-white: #ffffff;
+  --color-muted: #a9a9b0;
+
+  /* Warm secondary #5c574c: decorative only on dark; lighter steps are text-safe */
+  --color-warm-300: #b1aba0;
+  --color-warm-400: #999384;
+  --color-warm-500: #5c574c;
+
+  /* Typography */
+  --font-display: 'Syne Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+
+  --tracking-overline: 0.28em;
+}

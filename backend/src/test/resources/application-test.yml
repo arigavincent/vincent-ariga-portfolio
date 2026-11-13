@@ -5,9 +5,21 @@ spring:
     url: ${TEST_DATASOURCE_URL:jdbc:h2:mem:portfolio-test;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1}
     username: ${TEST_DATASOURCE_USERNAME:sa}
     password: ${TEST_DATASOURCE_PASSWORD:}
-  flyway:
-    clean-disabled: false
 
 app:
   seed:
     enabled: true
+  admin:
+    # Test fixture account, created by AdminBootstrap in the test context only.
+    username: test-admin
+    password: test-only-password-123
+  storage:
+    local-root: ${java.io.tmpdir}/portfolio-test-uploads
+  rate-limit:
+    # Generous by default so unrelated tests never trip a limit; RateLimitApiTest lowers them.
+    contact:
+      capacity: 1000
+      period: 1m
+    login:
+      capacity: 1000
+      period: 1m

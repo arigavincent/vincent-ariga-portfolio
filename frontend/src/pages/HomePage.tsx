@@ -4,6 +4,7 @@ import { Hero } from '@/features/home/Hero';
 import { JourneySection } from '@/features/home/JourneySection';
 import { ServicesSection } from '@/features/home/ServicesSection';
 import { SkillsSection } from '@/features/home/SkillsSection';
+import { TechMarquee } from '@/features/home/TechMarquee';
 import { WorkSection } from '@/features/home/WorkSection';
 import { useSceneScroll } from '@/features/scene/useSceneScroll';
 import { useHashScroll } from '@/hooks/useHashScroll';
@@ -20,6 +21,7 @@ export function HomePage() {
       <title>{settings.seoTitle}</title>
       <meta name="description" content={settings.seoDescription} />
       <Hero />
+      <TechMarquee />
       <AboutSection />
       <SkillsSection />
       <WorkSection />

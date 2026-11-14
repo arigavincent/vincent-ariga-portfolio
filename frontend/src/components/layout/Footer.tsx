@@ -1,7 +1,10 @@
 import { ArrowUp, Mail } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { siGithub, siWhatsapp } from 'simple-icons';
 
+import { queries } from '@/api/public';
 import { BrandIcon, Marquee } from '@/components/ui';
 import { useScrollTo } from '@/hooks/useScrollTo';
 import { useSettings } from '@/hooks/useSettings';
@@ -33,6 +36,7 @@ export function Footer() {
   const settings = useSettings();
   const scrollTo = useScrollTo();
   const time = useKenyaTime();
+  const { data: posts = [] } = useQuery(queries.blogPosts());
   const taglineParts = settings.tagline.split('·').map((part) => part.trim());
 
   const links = [
@@ -99,6 +103,19 @@ export function Footer() {
         <p className="font-mono text-xs text-warm-300">
           © {new Date().getFullYear()} {settings.displayName}. Built with Spring Boot and React.
         </p>
+        <nav
+          aria-label="Footer"
+          className="flex gap-6 font-mono text-xs tracking-overline uppercase"
+        >
+          <Link to="/projects" className="text-warm-300 transition-colors hover:text-gold-300">
+            Projects
+          </Link>
+          {posts.length > 0 ? (
+            <Link to="/blog" className="text-warm-300 transition-colors hover:text-gold-300">
+              Blog
+            </Link>
+          ) : null}
+        </nav>
         <button
           type="button"
           onClick={() => {

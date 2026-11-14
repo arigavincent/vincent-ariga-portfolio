@@ -41,6 +41,7 @@ public final class TestProperties {
 
     private static AppProperties with(Admin admin, String storageRoot, String jwtSecret, Limit limit) {
         return new AppProperties(
+                "https://example.test",
                 new Security(
                         new Jwt(jwtSecret, "test-issuer", Duration.ofMinutes(15), Duration.ofDays(7)),
                         new RefreshCookie(true, "Lax")),

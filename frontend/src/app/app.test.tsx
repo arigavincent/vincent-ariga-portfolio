@@ -91,4 +91,17 @@ describe('site routes', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Lost.' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back home' })).toHaveAttribute('href', '/');
   }, 15000);
+
+  it('opens a lazily loaded page directly, inside the site shell', async () => {
+    stubApi(publicApi);
+    renderRoutes(routes, '/blog');
+    await preloaderToLift();
+
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Notes from the backend.' }),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Nothing published yet.')).toBeInTheDocument();
+    expect(screen.queryByRole('status', { name: 'Loading page' })).not.toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
+  }, 15000);
 });

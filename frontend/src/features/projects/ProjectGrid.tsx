@@ -6,12 +6,12 @@ import { QueryContent, Reveal, Skeleton } from '@/components/ui';
 import { ProjectCard } from './ProjectCard';
 
 interface ProjectGridProps {
-  /** Show only the first N projects. */
-  limit?: number;
+  /** Show only featured projects (the home page), or everything published. */
+  featuredOnly?: boolean;
 }
 
-/** The published projects as a responsive grid of cards. */
-export function ProjectGrid({ limit }: ProjectGridProps) {
+/** Published projects as a responsive grid of large cards. */
+export function ProjectGrid({ featuredOnly = false }: ProjectGridProps) {
   const query = useQuery(queries.projects());
 
   return (
@@ -20,8 +20,8 @@ export function ProjectGrid({ limit }: ProjectGridProps) {
       label="projects"
       skeleton={
         <div className="grid gap-6 md:grid-cols-2">
-          {Array.from({ length: limit ?? 4 }, (_, index) => (
-            <Skeleton key={index} className="h-72 rounded-card" />
+          {Array.from({ length: 4 }, (_, index) => (
+            <Skeleton key={index} className="h-[28rem] rounded-card" />
           ))}
         </div>
       }
@@ -29,13 +29,15 @@ export function ProjectGrid({ limit }: ProjectGridProps) {
     >
       {(projects) => (
         <ul className="grid gap-6 md:grid-cols-2">
-          {projects.slice(0, limit).map((project, index) => (
-            <li key={project.id}>
-              <Reveal delay={(index % 2) * 0.1} className="h-full">
-                <ProjectCard project={project} index={index} />
-              </Reveal>
-            </li>
-          ))}
+          {projects
+            .filter((project) => !featuredOnly || project.featured)
+            .map((project, index) => (
+              <li key={project.id}>
+                <Reveal delay={(index % 2) * 0.1} className="h-full">
+                  <ProjectCard project={project} index={index} />
+                </Reveal>
+              </li>
+            ))}
         </ul>
       )}
     </QueryContent>

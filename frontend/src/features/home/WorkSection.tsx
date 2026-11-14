@@ -19,7 +19,7 @@ export function WorkSection() {
       </div>
 
       <div className="mt-14">
-        <ProjectGrid />
+        <ProjectGrid featuredOnly />
       </div>
     </Section>
   );

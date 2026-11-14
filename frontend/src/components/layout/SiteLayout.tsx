@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { SceneLayer } from '@/features/scene/SceneLayer';
+import { SceneActiveContext } from '@/hooks/useSceneActive';
 import { BootContext } from '@/hooks/useBooted';
 import { useBootLoading } from '@/hooks/useBootLoading';
 
@@ -16,26 +18,30 @@ import { SmoothScroll } from './SmoothScroll';
 /** The shell around every public page: preloader, cursor, smooth scroll, header and footer. */
 export function SiteLayout() {
   const [booted, setBooted] = useState(false);
+  const [sceneActive, setSceneActive] = useState(false);
   useBootLoading();
 
   return (
     <BootContext value={booted}>
-      <SmoothScroll>
-        <SkipLink />
-        <Preloader
-          onFinished={() => {
-            setBooted(true);
-          }}
-        />
-        <ScrollProgress />
-        <Header />
-        <main id="main" tabIndex={-1} className="relative z-10 outline-none">
-          <PageTransition />
-        </main>
-        <Footer />
-        <Grain />
-        <CustomCursor />
-      </SmoothScroll>
+      <SceneActiveContext value={sceneActive}>
+        <SmoothScroll>
+          <SkipLink />
+          <Preloader
+            onFinished={() => {
+              setBooted(true);
+            }}
+          />
+          <ScrollProgress />
+          <SceneLayer onActiveChange={setSceneActive} />
+          <Header />
+          <main id="main" tabIndex={-1} className="relative z-10 outline-none">
+            <PageTransition />
+          </main>
+          <Footer />
+          <Grain />
+          <CustomCursor />
+        </SmoothScroll>
+      </SceneActiveContext>
     </BootContext>
   );
 }

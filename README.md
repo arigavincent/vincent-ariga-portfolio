@@ -10,7 +10,7 @@ A monorepo with a Spring Boot API and a React + Three.js frontend, built phase b
 | Layer | Tech |
 | --- | --- |
 | Backend | Java 21, Spring Boot 3.5, Gradle (Kotlin DSL), PostgreSQL |
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, React Router, TanStack Query, Motion, GSAP, Lenis |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, React Router, TanStack Query, Motion, GSAP, Lenis, Three.js (React Three Fiber) |
 | Tooling | Docker Compose, GitHub Actions, Spotless, ESLint, Prettier, Vitest, JUnit 5 |
 
 ## Repository layout
@@ -119,7 +119,7 @@ test enforces WCAG AA contrast for every text/background pair. See
 2. ~~Backend domain: entities, migrations, public API, seed data~~ (v0.2.0)
 3. ~~Security and admin API: JWT, CRUD, uploads, contact form~~ (v0.3.0)
 4. ~~Frontend design system and layout~~ (v0.4.0)
-5. 3D hero and scroll storytelling
+5. ~~3D hero and scroll storytelling~~ (v0.5.0)
 6. Content sections
 7. Admin dashboard
 8. Polish and quality

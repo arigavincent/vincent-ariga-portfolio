@@ -63,7 +63,7 @@ frontend/src
 ├── components
 │   ├── ui       Reusable building blocks: Button, Magnetic, TiltCard, Reveal, SplitText, Marquee...
 │   └── layout   Header, mobile menu, footer, preloader, cursor, smooth scroll, page transitions
-├── features     Page sections grouped by area (home, projects)
+├── features     Page sections grouped by area (home, projects) and the 3D scene
 ├── pages        One component per route
 ├── hooks        Shared hooks (media queries, scrolling, settings, boot state)
 ├── lib          Framework-free helpers (class names, formatting, loading registry, GSAP setup)
@@ -79,6 +79,36 @@ frontend/src
 | One `QueryContent` component for loading, error, empty and loaded states | Every list behaves the same way and offers a retry | Slightly less control per section |
 | `prefers-reduced-motion` handled centrally | `MotionConfig`, a CSS rule, and opting out of Lenis and the custom cursor cover every animation | Reduced-motion users get a simpler, static site |
 | The styleguide route exists only in development | A living reference without shipping it to visitors | It is not visible on the deployed site |
+
+## 3D scene and scroll storytelling
+
+The home page sits on a fixed WebGL canvas (`features/scene`). One original composition, a liquid
+metal core in a wireframe cage with orbit rings, crystal shards and dust, is re-posed as the page
+scrolls.
+
+```
+scroll position ──ScrollTrigger (scrub)──> GSAP timeline ──writes──> sceneState (plain object)
+                                                                          │ read every frame
+pointer position ─────────────────────────────────────────────────> SceneContents (useFrame)
+```
+
+- `poses.ts` holds one pose per section (core position and scale, morph amount, ring spread,
+  camera, glow colour and energy, layer opacity). `stops.ts` turns measured section positions
+  into points on a timeline, and `useSceneScroll` rebuilds that timeline whenever the page height
+  changes.
+- `sceneState` is deliberately outside React: it changes every frame and must never re-render.
+- Colours are read from the design tokens at runtime (`lib/tokens.ts`), so the scene uses the same
+  palette as the rest of the site without hardcoding it.
+
+| Decision | Why | Trade-off |
+| --- | --- | --- |
+| The canvas is lazy-loaded and only on the home page | Three.js (about 285 kB gzipped) stays out of the first bundle and off pages that do not use it | The scene appears a moment after the shell on slow connections; the preloader covers it |
+| Device tiers: `none`, `low`, `high` | Reduced motion or no WebGL gets the CSS backdrop; phones and modest hardware get fewer pieces, no post-processing and a lower pixel ratio | Three code paths to keep looking good |
+| `PerformanceMonitor` drops bloom and pixel ratio when frames slow down | The scene degrades instead of stuttering on integrated graphics | Visual quality can change during a session |
+| Pixel ratio clamped to 1.5 (1.25 on low tier) | Retina screens would otherwise render four times the pixels for little visible gain | Slightly softer edges on high-density displays |
+| Procedural environment lighting (`Lightformer`) and a generated glow texture | Reflections and glow with zero downloaded assets | Less realistic than an HDRI |
+| Poses keep the core in each section's empty space and lower the layer's opacity behind text | Text stays readable over a moving background | The scene is subtler outside the hero and contact sections |
+| Three.js pinned to 0.182.0 | React Three Fiber 9 still uses `THREE.Clock`, which logs a deprecation warning on every page load from r183 | Revisit when R3F moves to `THREE.Timer` |
 
 ## Security
 

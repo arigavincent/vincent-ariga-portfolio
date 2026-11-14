@@ -24,7 +24,7 @@ final class SeedContent {
         settings.setDisplayName("Vincent Ariga");
         settings.setBrandMark("A&J");
         settings.setRole("Backend Engineer");
-        settings.setHeadline("Backend engineer building dependable systems and full-stack products.");
+        settings.setHeadline("I build dependable backends and the full-stack products around them.");
         settings.setTagline("SOFTWARE · STREAMING · APPS");
         settings.setBio("""
                 I'm Vincent, a backend engineer based in Kenya. Java and Spring Boot are home, Kotlin and Go \

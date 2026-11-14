@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 @import './tokens.css';
+@import 'lenis/dist/lenis.css';
+
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
 
 @layer base {
   html {
@@ -8,6 +15,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -15,6 +23,7 @@
     background-color: var(--color-ink-900);
     color: var(--color-white);
     font-family: var(--font-sans);
+    overflow-x: clip;
   }
 
   ::selection {
@@ -25,5 +34,80 @@
   :focus-visible {
     outline: 2px solid var(--color-gold-400);
     outline-offset: 3px;
+    border-radius: 2px;
   }
+
+  /* The custom cursor replaces the system one only where a precise pointer exists. */
+  @media (hover: hover) and (pointer: fine) {
+    html.has-custom-cursor,
+    html.has-custom-cursor a,
+    html.has-custom-cursor button,
+    html.has-custom-cursor [role='button'] {
+      cursor: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Page container: one max width and one fluid gutter everywhere. */
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Gold, letter-spaced mono label that sits above headings. Not named "overline": that is
+   Tailwind's text-decoration utility. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--color-gold-400);
+}
+
+/* Outlined display type. Decorative: always paired with a readable solid heading. */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-warm-400);
+}
+
+/* A hairline border with an orange-to-gold highlight travelling around it. */
+@utility gradient-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(
+        var(--gradient-border-fill, var(--color-ink-850)),
+        var(--gradient-border-fill, var(--color-ink-850))
+      )
+      padding-box,
+    conic-gradient(
+        from var(--border-angle),
+        transparent 0 58%,
+        var(--color-orange-500) 76%,
+        var(--color-gold-400) 86%,
+        transparent 100%
+      )
+      border-box,
+    linear-gradient(var(--color-ink-700), var(--color-ink-700)) border-box;
+  animation: var(--animate-border-spin);
+}
+
+/* Film grain over the whole page for a cinematic surface. Static, so it costs nothing per frame. */
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
 }

@@ -57,7 +57,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="relative border-t border-ink-700 bg-ink-950">
+    <footer className="relative z-10 border-t border-ink-700 bg-ink-950">
       <Marquee duration={28} className="border-b border-ink-700 py-6 sm:py-8">
         {taglineParts.map((part) => (
           <span

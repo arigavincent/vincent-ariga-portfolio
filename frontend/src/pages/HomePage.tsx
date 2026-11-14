@@ -5,12 +5,15 @@ import { JourneySection } from '@/features/home/JourneySection';
 import { ServicesSection } from '@/features/home/ServicesSection';
 import { SkillsSection } from '@/features/home/SkillsSection';
 import { WorkSection } from '@/features/home/WorkSection';
+import { useSceneScroll } from '@/features/scene/useSceneScroll';
 import { useHashScroll } from '@/hooks/useHashScroll';
+import { useSceneActive } from '@/hooks/useSceneActive';
 import { useSettings } from '@/hooks/useSettings';
 
 export function HomePage() {
   const settings = useSettings();
   useHashScroll();
+  useSceneScroll(useSceneActive());
 
   return (
     <>

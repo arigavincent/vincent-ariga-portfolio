@@ -2,6 +2,7 @@ export { BrandIcon } from './BrandIcon';
 export { Button, type ButtonProps } from './Button';
 export { buttonClasses } from './buttonClasses';
 export { Card } from './Card';
+export { ErrorBoundary } from './ErrorBoundary';
 export { Heading, Overline } from './Heading';
 export { ImageReveal } from './ImageReveal';
 export { Magnetic, MagneticButton } from './Magnetic';

@@ -124,3 +124,55 @@ export interface ApiErrorBody {
   path: string;
   fieldErrors?: FieldViolation[];
 }
+
+// ---------------------------------------------------------------------------
+// Admin: auth, write requests, inbox and uploads
+// ---------------------------------------------------------------------------
+
+export interface AdminUser {
+  username: string;
+  role: 'ADMIN';
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  tokenType: 'Bearer';
+  /** Seconds until the access token expires. */
+  expiresIn: number;
+  user: AdminUser;
+}
+
+export type ProjectInput = Omit<Project, 'id' | 'updatedAt'>;
+export type SkillInput = Omit<Skill, 'id'>;
+export type ExperienceInput = Omit<Experience, 'id'>;
+export type EducationInput = Omit<Education, 'id'>;
+export type ServiceOfferingInput = Omit<ServiceOffering, 'id'>;
+export type BlogPostInput = Omit<BlogPost, 'id' | 'publishedAt' | 'updatedAt'>;
+export type SiteSettingsInput = Omit<SiteSettings, 'updatedAt'>;
+
+export type ContactStatus = 'NEW' | 'READ' | 'ARCHIVED';
+
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  subject: string | null;
+  message: string;
+  status: ContactStatus;
+  createdAt: string;
+}
+
+export interface Page<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface UploadResult {
+  key: string;
+  url: string;
+  contentType: string;
+  size: number;
+}

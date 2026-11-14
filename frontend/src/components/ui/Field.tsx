@@ -126,3 +126,92 @@ export function TextAreaField({
     </FieldShell>
   );
 }
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+export type SelectFieldProps = SharedProps &
+  ComponentPropsWithRef<'select'> & { options: SelectOption[] };
+
+/** A labelled native select with the same wiring as {@link TextField}. */
+export function SelectField({
+  label,
+  hint,
+  error,
+  optional,
+  wrapperClassName,
+  className,
+  options,
+  ...select
+}: SelectFieldProps) {
+  const generatedId = useId();
+  const id = select.id ?? generatedId;
+  return (
+    <FieldShell
+      id={id}
+      label={label}
+      hint={hint}
+      error={error}
+      optional={optional}
+      className={wrapperClassName}
+    >
+      <select
+        {...select}
+        id={id}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(id, error, hint)}
+        className={cn(
+          controlClasses,
+          'h-[3.125rem]',
+          error ? 'border-orange-500' : 'border-ink-600',
+          className,
+        )}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </FieldShell>
+  );
+}
+
+export type CheckboxFieldProps = Pick<SharedProps, 'label' | 'hint' | 'wrapperClassName'> &
+  ComponentPropsWithRef<'input'>;
+
+/** A labelled checkbox. The label sits beside the box and is part of the click target. */
+export function CheckboxField({
+  label,
+  hint,
+  wrapperClassName,
+  className,
+  ...input
+}: CheckboxFieldProps) {
+  const generatedId = useId();
+  const id = input.id ?? generatedId;
+  return (
+    <div className={cn('flex flex-col gap-2', wrapperClassName)}>
+      <label
+        htmlFor={id}
+        className="flex cursor-pointer items-center gap-3 text-sm font-medium text-white"
+      >
+        <input
+          {...input}
+          id={id}
+          type="checkbox"
+          aria-describedby={hint ? `${id}-hint` : undefined}
+          className={cn('size-5 rounded border-ink-600 accent-orange-500', className)}
+        />
+        {label}
+      </label>
+      {hint ? (
+        <p id={`${id}-hint`} className="text-sm text-warm-300">
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  );
+}

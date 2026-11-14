@@ -106,6 +106,12 @@ docker compose up --build
 In development, `http://localhost:5173/styleguide` shows every token and component of the design
 system. It is not part of production builds.
 
+## Admin dashboard
+
+`/admin` is where the site's content is edited: projects, skills, experience, education, services,
+blog posts, the profile and site copy, the CV, and the contact inbox. Sign in with the account
+created from `APP_ADMIN_USERNAME` / `APP_ADMIN_PASSWORD`. Changes are live as soon as they are saved.
+
 ## Design tokens
 
 The A&J palette lives in one file, [`frontend/src/styles/tokens.css`](frontend/src/styles/tokens.css),
@@ -121,7 +127,7 @@ test enforces WCAG AA contrast for every text/background pair. See
 4. ~~Frontend design system and layout~~ (v0.4.0)
 5. ~~3D hero and scroll storytelling~~ (v0.5.0)
 6. ~~Content sections~~ (v0.6.0)
-7. Admin dashboard
+7. ~~Admin dashboard~~ (v0.7.0)
 8. Polish and quality
 9. Deployment and docs
 

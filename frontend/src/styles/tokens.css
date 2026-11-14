@@ -77,10 +77,17 @@
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
   --animate-marquee: marquee var(--marquee-duration, 30s) linear infinite;
   --animate-border-spin: border-spin 6s linear infinite;
+  --animate-orbit: orbit var(--orbit-duration, 60s) linear infinite;
 
   @keyframes marquee {
     to {
       transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes orbit {
+    to {
+      rotate: 360deg;
     }
   }
 

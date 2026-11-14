@@ -54,6 +54,32 @@ com.arigavincent.portfolio
 | One `ApiError` shape from a single `@RestControllerAdvice` | Clients handle one error format, including Spring MVC's own errors | Spring's `ProblemDetail` format is not used |
 | Seed runner fills empty tables only | Safe to leave enabled: admin edits are never overwritten | Changing seed copy later does not update an existing database |
 
+## Frontend layout
+
+```
+frontend/src
+├── app          App shell: providers, router, query client
+├── api          Typed client (request, ApiError), DTO types, query definitions
+├── components
+│   ├── ui       Reusable building blocks: Button, Magnetic, TiltCard, Reveal, SplitText, Marquee...
+│   └── layout   Header, mobile menu, footer, preloader, cursor, smooth scroll, page transitions
+├── features     Page sections grouped by area (home, projects)
+├── pages        One component per route
+├── hooks        Shared hooks (media queries, scrolling, settings, boot state)
+├── lib          Framework-free helpers (class names, formatting, loading registry, GSAP setup)
+└── styles       tokens.css (the palette and scales) and index.css (base styles, utilities)
+```
+
+| Decision | Why | Trade-off |
+| --- | --- | --- |
+| Motion for component animation, GSAP + ScrollTrigger for scroll-driven scenes | Motion handles enter/exit, springs and in-view reveals declaratively; GSAP is the better tool for scrubbed timelines | Two animation libraries in the bundle |
+| Lenis driven by GSAP's ticker | Smooth scrolling, ScrollTrigger and animations advance on the same frame | Lenis must be mounted before the ticker is attached (see `SmoothScroll`) |
+| Preloader progress comes from a small loading registry | The counter reflects real work (fonts, first API data, later the 3D scene), and a failed request still completes so the page never sticks | Progress is weighted, not byte-accurate |
+| Built-in fallback identity (`lib/site.ts`) | If the API is unreachable the site still shows who I am and how to reach me | The fallback has to be kept in step with the seed |
+| One `QueryContent` component for loading, error, empty and loaded states | Every list behaves the same way and offers a retry | Slightly less control per section |
+| `prefers-reduced-motion` handled centrally | `MotionConfig`, a CSS rule, and opting out of Lenis and the custom cursor cover every animation | Reduced-motion users get a simpler, static site |
+| The styleguide route exists only in development | A living reference without shipping it to visitors | It is not visible on the deployed site |
+
 ## Security
 
 | Decision | Why | Trade-off |

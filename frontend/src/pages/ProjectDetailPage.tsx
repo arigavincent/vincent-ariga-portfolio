@@ -6,6 +6,7 @@ import { siGithub } from 'simple-icons';
 import { ApiError } from '@/api/client';
 import { queries } from '@/api/public';
 import type { Project } from '@/api/types';
+import { Seo } from '@/components/Seo';
 import {
   BrandIcon,
   Button,
@@ -29,8 +30,12 @@ function ProjectArticle({ project }: { project: Project }) {
 
   return (
     <article>
-      <title>{`${project.title} | ${settings.displayName} · ${settings.brandMark}`}</title>
-      <meta name="description" content={project.summary} />
+      <Seo
+        title={`${project.title} | ${settings.displayName} · ${settings.brandMark}`}
+        description={project.summary}
+        path={`/projects/${project.slug}`}
+        type="article"
+      />
 
       <header className="flex flex-col gap-8">
         <Overline>{project.category}</Overline>

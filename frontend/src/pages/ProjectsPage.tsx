@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { Heading, Section } from '@/components/ui';
 import { ProjectIndex } from '@/features/projects/ProjectIndex';
 import { useSettings } from '@/hooks/useSettings';
@@ -7,10 +8,10 @@ export function ProjectsPage() {
 
   return (
     <>
-      <title>{`Projects | ${settings.displayName} · ${settings.brandMark}`}</title>
-      <meta
-        name="description"
-        content={`Projects designed and built by ${settings.displayName}.`}
+      <Seo
+        title={`Projects | ${settings.displayName} · ${settings.brandMark}`}
+        description={`Projects designed and built by ${settings.displayName}.`}
+        path="/projects"
       />
       <Section className="pt-40">
         <Heading

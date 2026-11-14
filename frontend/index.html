@@ -4,15 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1b1b20" />
+    <meta name="color-scheme" content="dark" />
+    <title>Vincent Ariga · A&amp;J | Backend Engineer</title>
     <meta
       name="description"
-      content="Vincent Ariga · A&J. Backend engineer working in Java / Spring Boot, Kotlin and Go, building full-stack products from Kenya."
+      content="Vincent Ariga is a backend engineer in Kenya working in Java / Spring Boot, Kotlin and Go, and building full-stack products."
     />
+    <meta name="author" content="Vincent Ariga" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Vincent Ariga · A&amp;J</title>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Defaults for link previews; each page replaces them once the app has loaded. -->
+    <meta property="og:site_name" content="Vincent Ariga · A&amp;J" />
+    <meta property="og:locale" content="en_KE" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <style>
+      /* Painted before any script runs, so there is never a white flash. */
+      html {
+        background-color: #1b1b20;
+      }
+      /* The brand mark shown until the app replaces it: the first paint needs no JavaScript. */
+      .boot {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: #0e0e11;
+        color: #ffffff;
+        font:
+          800 1.5rem/1 system-ui,
+          sans-serif;
+        letter-spacing: -0.02em;
+      }
+      .boot span {
+        color: #f26b1d;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="boot" aria-hidden="true">A<span>&amp;</span>J</div></div>
+    <noscript>
+      <p style="margin: 2rem; font-family: system-ui, sans-serif; color: #ffffff">
+        Vincent Ariga · A&amp;J. Backend engineer in Kenya. This site needs JavaScript; my work is
+        also on
+        <a href="https://github.com/arigavincent" style="color: #f4813e">GitHub</a>.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

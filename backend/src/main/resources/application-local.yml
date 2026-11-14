@@ -11,6 +11,9 @@ spring:
     password:
 
 app:
+  cors:
+    # The Vite dev and preview servers, under both names a browser may use for this machine.
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173
   security:
     refresh-cookie:
       # Plain http://localhost cannot receive Secure cookies in every browser.

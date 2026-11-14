@@ -26,6 +26,20 @@ export const routes: RouteObject[] = [
       { index: true, element: <HomePage /> },
       { path: 'projects', element: <ProjectsPage /> },
       { path: 'projects/:slug', element: <ProjectDetailPage /> },
+      {
+        path: 'blog',
+        lazy: async () => {
+          const { BlogPage } = await import('@/pages/BlogPage');
+          return { Component: BlogPage };
+        },
+      },
+      {
+        path: 'blog/:slug',
+        lazy: async () => {
+          const { BlogPostPage } = await import('@/pages/BlogPostPage');
+          return { Component: BlogPostPage };
+        },
+      },
       ...developmentRoutes,
       { path: '*', element: <NotFoundPage /> },
     ],

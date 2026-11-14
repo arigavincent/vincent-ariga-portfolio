@@ -76,6 +76,7 @@ export function stubApi(routes: Record<string, unknown>) {
 /** The public API with seed-like content. */
 export const publicApi: Record<string, unknown> = {
   '/api/settings': settingsFixture,
+  '/api/blog': [],
   '/api/projects': [projectFixture],
   '/api/projects/aj-stream': projectFixture,
   '/api/skills': skillFixtures,

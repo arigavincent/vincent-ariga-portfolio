@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { classifyDevice, type DeviceTraits } from './deviceTier';
-import { createDust, createRandom, createShards } from './layout';
+import { createRandom } from '@/lib/random';
+
+import { createDust, createShards } from './layout';
 import { poses, resetSceneState, sceneState } from './poses';
 import { computeStops } from './stops';
 

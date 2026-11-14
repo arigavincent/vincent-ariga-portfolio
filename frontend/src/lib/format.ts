@@ -3,6 +3,12 @@ const monthYear = new Intl.DateTimeFormat('en', {
   year: 'numeric',
   timeZone: 'UTC',
 });
+const longDate = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 
 /** Splits prose from the API into paragraphs on blank lines. */
 export function toParagraphs(text: string): string[] {
@@ -15,6 +21,11 @@ export function toParagraphs(text: string): string[] {
 /** "Mar 2024" for an ISO date (yyyy-mm-dd). */
 export function formatMonthYear(isoDate: string): string {
   return monthYear.format(new Date(`${isoDate}T00:00:00Z`));
+}
+
+/** "14 November 2026" for an ISO timestamp. */
+export function formatLongDate(isoTimestamp: string): string {
+  return longDate.format(new Date(isoTimestamp));
 }
 
 /**

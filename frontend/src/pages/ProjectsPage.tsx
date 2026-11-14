@@ -1,5 +1,5 @@
 import { Heading, Section } from '@/components/ui';
-import { ProjectGrid } from '@/features/projects/ProjectGrid';
+import { ProjectIndex } from '@/features/projects/ProjectIndex';
 import { useSettings } from '@/hooks/useSettings';
 
 export function ProjectsPage() {
@@ -20,7 +20,7 @@ export function ProjectsPage() {
           lead="Streaming, church management, payments and learning platforms."
         />
         <div className="mt-16">
-          <ProjectGrid />
+          <ProjectIndex />
         </div>
       </Section>
     </>

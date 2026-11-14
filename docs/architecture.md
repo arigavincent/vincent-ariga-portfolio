@@ -80,6 +80,21 @@ frontend/src
 | `prefers-reduced-motion` handled centrally | `MotionConfig`, a CSS rule, and opting out of Lenis and the custom cursor cover every animation | Reduced-motion users get a simpler, static site |
 | The styleguide route exists only in development | A living reference without shipping it to visitors | It is not visible on the deployed site |
 
+## Content sections
+
+| Decision | Why | Trade-off |
+| --- | --- | --- |
+| Project covers are generated from the project's slug when no image is uploaded | No stock photos or invented screenshots; every project still gets distinct, on-brand art, and an uploaded cover replaces it automatically | The art is abstract and says nothing about the product |
+| The skills orbit is CSS transforms, not WebGL | Cheap on phones, stands still under reduced motion, and the page already has one canvas | Flat rings rather than true 3D |
+| The orbit is decorative; the category list beside it is the accessible content | Screen readers get a plain list, pointer users get the interaction | The same skills appear twice in the DOM |
+| The contact form validates with Zod using the same rules as the API, and maps the API's field errors back onto fields | Most mistakes are caught instantly, and the server stays the authority | Two copies of the rules to keep in step |
+| Blog pages are lazy routes | The Markdown renderer (about 37 kB gzipped) loads only when a post is opened | A brief wait on first visit to the blog |
+| Raw HTML in Markdown is not rendered | A post can never inject markup or scripts | Posts are limited to Markdown |
+
+Browsers send an `Origin` header on the contact form's `POST` even when the API is reached through
+a same-origin proxy or rewrite, so the site's own origin must be listed in
+`APP_CORS_ALLOWED_ORIGINS`.
+
 ## 3D scene and scroll storytelling
 
 The home page sits on a fixed WebGL canvas (`features/scene`). One original composition, a liquid

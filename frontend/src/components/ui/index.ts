@@ -3,7 +3,15 @@ export { Button, type ButtonProps } from './Button';
 export { buttonClasses } from './buttonClasses';
 export { Card } from './Card';
 export { ErrorBoundary } from './ErrorBoundary';
-export { TextAreaField, TextField, type TextAreaFieldProps, type TextFieldProps } from './Field';
+export {
+  CheckboxField,
+  SelectField,
+  TextAreaField,
+  TextField,
+  type SelectOption,
+  type TextAreaFieldProps,
+  type TextFieldProps,
+} from './Field';
 export { Heading, Overline } from './Heading';
 export { ImageReveal } from './ImageReveal';
 export { Magnetic, MagneticButton } from './Magnetic';

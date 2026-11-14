@@ -1,7 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
+import { Building2, Layers, Server, Sparkles, Waypoints, type LucideIcon } from 'lucide-react';
 
 import { queries } from '@/api/public';
-import { Card, Heading, QueryContent, Reveal, Section, Skeleton } from '@/components/ui';
+import { Heading, QueryContent, Reveal, Section, Skeleton, TiltCard } from '@/components/ui';
+
+/** Icons for the keys stored on services in the admin panel. */
+const serviceIcons: Record<string, LucideIcon> = {
+  server: Server,
+  api: Waypoints,
+  layers: Layers,
+  building: Building2,
+};
 
 export function ServicesSection() {
   const query = useQuery(queries.services());
@@ -23,26 +32,36 @@ export function ServicesSection() {
           skeleton={
             <div className="grid gap-6 sm:grid-cols-2">
               {Array.from({ length: 4 }, (_, index) => (
-                <Skeleton key={index} className="h-56 rounded-card" />
+                <Skeleton key={index} className="h-64 rounded-card" />
               ))}
             </div>
           }
         >
           {(services) => (
             <ul className="grid gap-6 sm:grid-cols-2">
-              {services.map((service, index) => (
-                <li key={service.id}>
-                  <Reveal delay={(index % 2) * 0.1} className="h-full">
-                    <Card className="flex h-full flex-col gap-6">
-                      <p className="font-mono text-sm text-gold-400">
-                        {String(index + 1).padStart(2, '0')}
-                      </p>
-                      <h3 className="font-display text-h3 font-extrabold">{service.title}</h3>
-                      <p className="text-muted">{service.description}</p>
-                    </Card>
-                  </Reveal>
-                </li>
-              ))}
+              {services.map((service, index) => {
+                const Icon = serviceIcons[service.iconKey ?? ''] ?? Sparkles;
+                return (
+                  <li key={service.id}>
+                    <Reveal delay={(index % 2) * 0.1} className="h-full">
+                      <TiltCard className="h-full rounded-card" maxTilt={5}>
+                        <div className="group flex h-full flex-col gap-6 rounded-card border border-ink-700 bg-ink-850 p-6 shadow-card transition-colors duration-500 hover:border-gold-400/60 sm:p-8">
+                          <div className="flex items-center justify-between">
+                            <span className="grid size-12 place-items-center rounded-2xl border border-ink-600 text-gold-400 transition-colors duration-500 group-hover:border-orange-500 group-hover:text-orange-400">
+                              <Icon aria-hidden="true" className="size-5" />
+                            </span>
+                            <span className="font-mono text-sm text-warm-300">
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                          </div>
+                          <h3 className="font-display text-h3 font-extrabold">{service.title}</h3>
+                          <p className="text-muted">{service.description}</p>
+                        </div>
+                      </TiltCard>
+                    </Reveal>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </QueryContent>

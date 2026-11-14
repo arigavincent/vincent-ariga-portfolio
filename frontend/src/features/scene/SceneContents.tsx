@@ -41,6 +41,9 @@ const rings = [
 
 const { damp, lerp } = MathUtils;
 
+/** How much of the layer's opacity remains behind content on portrait screens. */
+const PORTRAIT_SECTION_DIM = 0.55;
+
 /** Reads the brand palette from the design tokens, so the scene never hardcodes a colour. */
 function readPalette() {
   return {
@@ -234,11 +237,16 @@ export function SceneContents({ tier, onReady }: SceneContentsProps) {
       dustPoints.current.rotation.y = time * 0.012 + scene.progress * 1.4;
     }
 
-    // Fade the whole layer behind text-heavy sections. Written straight to the canvas element:
-    // it changes continuously while scrolling and must not go through React.
-    if (Math.abs(scene.dim - appliedDim.current) > 0.004) {
-      appliedDim.current = scene.dim;
-      state.gl.domElement.style.opacity = scene.dim.toFixed(3);
+    // Fade the whole layer behind text-heavy sections. On portrait screens the core cannot move
+    // aside, so past the hero the layer steps back further. Written straight to the canvas
+    // element: it changes continuously while scrolling and must not go through React.
+    const portraitFade = portrait
+      ? lerp(1, PORTRAIT_SECTION_DIM, Math.min(1, scene.progress / 0.04))
+      : 1;
+    const dim = scene.dim * portraitFade;
+    if (Math.abs(dim - appliedDim.current) > 0.004) {
+      appliedDim.current = dim;
+      state.gl.domElement.style.opacity = dim.toFixed(3);
     }
 
     frames.current += 1;

@@ -83,7 +83,7 @@ export const poses: Record<SceneStopId, ScenePose> = {
     cameraZ: 8,
     warmth: 1,
     energy: 0.85,
-    dim: 0.55,
+    dim: 0.45,
   },
   work: {
     coreX: 3.4,

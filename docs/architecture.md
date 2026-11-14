@@ -95,6 +95,20 @@ Browsers send an `Origin` header on the contact form's `POST` even when the API 
 a same-origin proxy or rewrite, so the site's own origin must be listed in
 `APP_CORS_ALLOWED_ORIGINS`.
 
+## Admin dashboard
+
+`features/admin` is a separate lazy chunk (about 13 kB gzipped), outside the public site's shell:
+visitors never download it, and it has no preloader, canvas or custom cursor.
+
+| Decision | Why | Trade-off |
+| --- | --- | --- |
+| The access token is kept in memory only; the session is restored from the HttpOnly refresh cookie | Nothing a script could read later is ever written to storage | Every page load makes one refresh call |
+| Expired calls refresh once and retry, and concurrent calls share that refresh | The refresh token rotates on use, so two parallel refreshes would trip reuse detection and end the session | A little more logic in `api/auth.ts` |
+| One `ResourceConfig` per content type drives generic list and edit pages | Six content types share one table, one form builder and one set of mutations; a new type is a config object | Unusual layouts need a custom page (settings and the inbox are) |
+| Forms hold strings and convert at the edge (`toValues` / `toInput`) | Lists edit as one item per line, empty inputs become `null`, and validation stays simple | Each resource declares both conversions |
+| Delete needs two presses and resets itself | No modal, and a stray press does nothing | Slightly slower for bulk clean-up |
+| Saving invalidates every cached query | The public pages in the same tab show the change immediately | A few extra requests after each save |
+
 ## 3D scene and scroll storytelling
 
 The home page sits on a fixed WebGL canvas (`features/scene`). One original composition, a liquid

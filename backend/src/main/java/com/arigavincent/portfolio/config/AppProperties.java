@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(
+        @NotBlank String siteUrl,
         @Valid @NotNull Security security,
         @Valid @NotNull Cors cors,
         @Valid @NotNull Admin admin,

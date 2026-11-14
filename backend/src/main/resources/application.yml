@@ -69,6 +69,8 @@ springdoc:
     tags-sorter: alpha
 
 app:
+  # Public address of the site (the frontend), used for absolute links in the sitemap.
+  site-url: ${APP_SITE_URL:http://localhost:5173}
   seed:
     enabled: ${APP_SEED_ENABLED:true}
   security:

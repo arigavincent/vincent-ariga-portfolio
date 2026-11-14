@@ -1,9 +1,15 @@
+import { Seo } from '@/components/Seo';
 import { Button, Overline, Section } from '@/components/ui';
 
 export function NotFoundPage() {
   return (
     <Section className="flex min-h-dvh items-center pt-40">
-      <title>Page not found | Vincent Ariga · A&amp;J</title>
+      <Seo
+        title="Page not found | Vincent Ariga · A&J"
+        description="That page does not exist."
+        path="/404"
+        noIndex
+      />
       <div className="flex flex-col items-start gap-8">
         <Overline>Error 404</Overline>
         <h1 className="font-display text-display font-extrabold">

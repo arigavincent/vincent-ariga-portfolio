@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { queries } from '@/api/public';
+import { Seo } from '@/components/Seo';
 import { Heading, QueryContent, Reveal, Section, Skeleton, Tag } from '@/components/ui';
 import { useSettings } from '@/hooks/useSettings';
 import { formatLongDate } from '@/lib/format';
@@ -13,10 +14,10 @@ export function BlogPage() {
 
   return (
     <>
-      <title>{`Blog | ${settings.displayName} · ${settings.brandMark}`}</title>
-      <meta
-        name="description"
-        content={`Notes on backend engineering by ${settings.displayName}.`}
+      <Seo
+        title={`Blog | ${settings.displayName} · ${settings.brandMark}`}
+        description={`Notes on backend engineering by ${settings.displayName}.`}
+        path="/blog"
       />
       <Section className="pt-40">
         <Heading

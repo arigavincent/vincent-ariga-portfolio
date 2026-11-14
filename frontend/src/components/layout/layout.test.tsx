@@ -19,7 +19,7 @@ describe('Header', () => {
     stubApi(publicApi);
     renderWithProviders(<Header />);
 
-    expect(screen.getByRole('link', { name: /Vincent Ariga · A&J, home/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /A&J.*Vincent Ariga.*home/ })).toHaveAttribute(
       'href',
       '/',
     );

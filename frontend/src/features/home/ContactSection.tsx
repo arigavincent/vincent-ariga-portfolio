@@ -1,10 +1,16 @@
 import { Download, Mail } from 'lucide-react';
+import { lazy, Suspense } from 'react';
 import { siGithub, siWhatsapp } from 'simple-icons';
 
 import { cvUrl } from '@/api/public';
-import { BrandIcon, Heading, Reveal, Section } from '@/components/ui';
-import { ContactForm } from '@/features/contact/ContactForm';
+import { BrandIcon, Heading, Reveal, Section, Skeleton } from '@/components/ui';
 import { useSettings } from '@/hooks/useSettings';
+
+/** The form brings its validation libraries with it, so it loads when the page does, not before. */
+const ContactForm = lazy(async () => {
+  const { ContactForm: Form } = await import('@/features/contact/ContactForm');
+  return { default: Form };
+});
 
 export function ContactSection() {
   const settings = useSettings();
@@ -77,7 +83,9 @@ export function ContactSection() {
         </div>
 
         <Reveal delay={0.1}>
-          <ContactForm />
+          <Suspense fallback={<Skeleton className="h-[28rem] rounded-card" />}>
+            <ContactForm />
+          </Suspense>
         </Reveal>
       </div>
     </Section>

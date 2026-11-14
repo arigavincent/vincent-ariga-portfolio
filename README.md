@@ -128,7 +128,7 @@ test enforces WCAG AA contrast for every text/background pair. See
 5. ~~3D hero and scroll storytelling~~ (v0.5.0)
 6. ~~Content sections~~ (v0.6.0)
 7. ~~Admin dashboard~~ (v0.7.0)
-8. Polish and quality
+8. ~~Polish and quality~~ (v0.8.0)
 9. Deployment and docs
 
 ## License

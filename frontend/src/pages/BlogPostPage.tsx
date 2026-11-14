@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router';
 
 import { ApiError } from '@/api/client';
 import { queries } from '@/api/public';
+import { Seo } from '@/components/Seo';
 import { Button, Section, Skeleton, SplitText, Tag } from '@/components/ui';
 import { Markdown } from '@/features/blog/Markdown';
 import { useSettings } from '@/hooks/useSettings';
@@ -51,8 +52,12 @@ export function BlogPostPage() {
           </div>
         ) : (
           <article className="flex flex-col gap-10">
-            <title>{`${post.title} | ${settings.displayName} · ${settings.brandMark}`}</title>
-            <meta name="description" content={post.excerpt} />
+            <Seo
+              title={`${post.title} | ${settings.displayName} · ${settings.brandMark}`}
+              description={post.excerpt}
+              path={`/blog/${post.slug}`}
+              type="article"
+            />
 
             <header className="flex flex-col gap-6">
               {post.publishedAt ? (
